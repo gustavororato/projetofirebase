@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>News</title>
+    <script src="https://www.gstatic.com/firebasejs/3.7.6/firebase.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+<script>
+ // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyA-zN_m1dPOVqPkMKA_a2TFdAkrbGvXLcI",
+    authDomain: "projetoteste-a890d.firebaseapp.com",
+    databaseURL: "https://projetoteste-a890d.firebaseio.com",
+    projectId: "projetoteste-a890d",
+    storageBucket: "projetoteste-a890d.appspot.com",
+    messagingSenderId: "1065775505918"
+  };
+  firebase.initializeApp(config);
+
+</script>
+
+</head>
+<body>
+  <input type="text" id="title" id="title" placeholder="Título"><br/>
+  <textarea name="text" id="text" placeholder="Texto"></textarea><br/>
+  <button id="submit">Enviar</button><br/><br/>
+  <script>
+
+$("#submit").click(function() {
+      var title = $('#title').val();
+      var text = $('#text').val();
+      firebase.database().ref('news').push({ title: title, text: text });
+});
+
+firebase.database().ref('news').on('child_added', function(snap) {
+  var createnews = snap.val();
+  if(createnews.title != null){ 
+    showNews(createnews.title, createnews.text);
+  }
+});
+
+function showNews(title, text) {
+  $("#news").append('<strong>Título: '+ title +' </strong><br/>Texto: '+text+'<br/><br/>');
+};
+
+function deleteNewsId(newsId) {
+  firebase.database().ref('news/' + newsId).remove();
+}
+
+//deleteNewsId(newsId);
+</script>
+
+<div id='news'></div>
+</body>
+</html>
